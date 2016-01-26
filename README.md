@@ -44,4 +44,4 @@ License
 
 ![WinRar][1]
 
-[1]: ./art/winrar.png
+[1]: ./art/winrar.jpg
