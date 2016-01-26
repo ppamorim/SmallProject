@@ -10,10 +10,19 @@ Let's start the Proguard!
 * (Project + Picasso + Dagger + OkHttp)*Proguard = 24kb :D
 * (Project + Picasso + Dagger + OkHttp + LoganSquare)*Proguard = 85kb :(
 
-#Gotchas
+Gotchas
+-------
 
 * The project needs to remove the locationListener, this adds 100kb for the app.
 * This is written in Java, Hardly I will can reduce the size of the app...
+
+Libraries
+---------
+
+* Dagger 2
+* Picasso
+* OkHttp
+* LoganSquare
 
 Developed By
 ------------

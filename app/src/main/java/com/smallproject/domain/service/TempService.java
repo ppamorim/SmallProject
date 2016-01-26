@@ -15,7 +15,6 @@
 */
 package com.smallproject.domain.service;
 
-import android.location.Location;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class TempService {
     this.okHttpClient = okHttpClient;
   }
 
-  public InputStream getActualTemperature(Location location) throws IOException {
+  public InputStream getActualTemperature() throws IOException {
       Request request = new Request.Builder()
           .url("")
           .build();

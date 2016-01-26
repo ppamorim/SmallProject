@@ -15,7 +15,6 @@
 */
 package com.smallproject.domain.interactor;
 
-import android.location.Location;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.smallproject.domain.model.Temp;
 import com.smallproject.domain.service.TempService;
@@ -31,7 +30,6 @@ public class GetTempImpl implements Interactor, GetTemp {
   private final MainThread mainThread;
   private Callback callback;
   private OkHttpClient okHttpClient;
-  private Location location;
 
   @Inject public GetTempImpl(InteractorExecutor interactorExecutor,
       MainThread mainThread, OkHttpClient okHttpClient) {
@@ -48,14 +46,10 @@ public class GetTempImpl implements Interactor, GetTemp {
     this.interactorExecutor.run(this);
   }
 
-  @Override public void setLocation(Location location) {
-   this.location = location;
-  }
-
   @Override public void run() {
     try {
       TempService tempService = new TempService(okHttpClient);
-      Temp temp = LoganSquare.parse(tempService.getActualTemperature(location), Temp.class);
+      Temp temp = LoganSquare.parse(tempService.getActualTemperature(), Temp.class);
       if(temp != null) {
         notifySuccess();
       }
@@ -63,7 +57,6 @@ public class GetTempImpl implements Interactor, GetTemp {
       e.printStackTrace();
       notifyError();
     }
-    this.location = null;
   }
 
   private void notifySuccess() {
