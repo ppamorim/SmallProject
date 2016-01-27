@@ -13,21 +13,38 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.smallproject.ui.presenter;
+package com.smallproject.ui.adapter;
 
 import android.content.Context;
-import com.smallproject.domain.model.Post;
-import java.util.ArrayList;
+import android.widget.BaseAdapter;
+import java.util.List;
 
-public interface HomeActivityPresenter extends Presenter {
-  void setView(View view);
-  void resume();
-  Post getPostAtPosition(int position);
-  interface View {
-    Context getContext();
-    boolean isReady();
-    void onSuccess(ArrayList<Post> posts);
-    void onError();
+public abstract class AbstractAdapter<T> extends BaseAdapter {
+
+  public final Context context;
+  public List<T> data;
+
+  public AbstractAdapter(Context context) {
+    this.context = context;
+  }
+
+  @Override
+  public int getCount() {
+    return data != null ? data.size() : -1;
+  }
+
+  @Override
+  public T getItem(int i) {
+    return data.get(i);
+  }
+
+  public void setData(List<T> data) {
+    this.data = data;
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return getItem(position).hashCode();
   }
 
 }

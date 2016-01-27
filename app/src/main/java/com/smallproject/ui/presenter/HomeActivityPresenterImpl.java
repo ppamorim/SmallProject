@@ -16,18 +16,19 @@
 package com.smallproject.ui.presenter;
 
 import android.os.Bundle;
-import com.smallproject.domain.interactor.GetTemp;
-import com.smallproject.domain.model.Temp;
+import com.smallproject.domain.interactor.GetPost;
+import com.smallproject.domain.model.Post;
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class HomeActivityPresenterImpl implements HomeActivityPresenter {
 
-  private Temp temp;
+  private ArrayList<Post> posts;
   private View view;
-  private GetTemp getTemp;
+  private GetPost getPost;
 
-  @Inject public HomeActivityPresenterImpl(GetTemp getTemp) {
-    this.getTemp = getTemp;
+  @Inject public HomeActivityPresenterImpl(GetPost getPost) {
+    this.getPost = getPost;
   }
 
   @Override public void setView(View view) {
@@ -42,43 +43,47 @@ public class HomeActivityPresenterImpl implements HomeActivityPresenter {
   }
 
   @Override public void initialize() {
-
+    getPost();
   }
 
   @Override public Bundle saveInstance(Bundle instance) {
-    if (temp != null) {
-      instance.putParcelable(Temp.TAG, temp);
+    if (posts != null) {
+      instance.putParcelableArrayList(Post.TAG, posts);
     }
     return instance;
   }
 
   @Override public void restoreInstance(Bundle instance) {
-    if (instance.containsKey(Temp.TAG)) {
-      temp = instance.getParcelable(Temp.TAG);
-      instance.remove(Temp.TAG);
+    if (instance.containsKey(Post.TAG)) {
+      posts = instance.getParcelableArrayList(Post.TAG);
+      instance.remove(Post.TAG);
     }
   }
 
   @Override public void destroy() {
     this.view = null;
-    this.temp = null;
+    this.posts = null;
   }
 
-  private void getTemp() {
-    getTemp.execute(new GetTemp.Callback() {
-      @Override public void onSuccess() {
-        notifySuccess();
-      }
+  @Override public Post getPostAtPosition(int position)  {
+    return posts.get(position);
+  }
 
+  private void getPost() {
+    getPost.execute(new GetPost.Callback() {
+      @Override public void onSuccess(ArrayList<Post> posts) {
+        notifySuccess(posts);
+      }
       @Override public void onError() {
         notifyError();
       }
     });
   }
 
-  private void notifySuccess() {
+  private void notifySuccess(ArrayList<Post> posts) {
+    this.posts = posts;
     if(view != null && view.isReady()) {
-      view.onSuccess(temp);
+      view.onSuccess(posts);
     }
   }
 

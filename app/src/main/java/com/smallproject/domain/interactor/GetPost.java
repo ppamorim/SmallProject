@@ -13,21 +13,15 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.smallproject.ui.presenter;
+package com.smallproject.domain.interactor;
 
-import android.content.Context;
 import com.smallproject.domain.model.Post;
 import java.util.ArrayList;
 
-public interface HomeActivityPresenter extends Presenter {
-  void setView(View view);
-  void resume();
-  Post getPostAtPosition(int position);
-  interface View {
-    Context getContext();
-    boolean isReady();
+public interface GetPost {
+  void execute(Callback callback);
+  interface Callback {
     void onSuccess(ArrayList<Post> posts);
     void onError();
   }
-
 }

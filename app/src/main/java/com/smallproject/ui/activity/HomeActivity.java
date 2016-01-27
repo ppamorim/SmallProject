@@ -15,44 +15,51 @@
 */
 package com.smallproject.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import com.smallproject.R;
 import com.smallproject.SmallProjectApplication;
 import com.smallproject.di.ActivityModule;
 import com.smallproject.di.HomeActivityModule;
 import com.smallproject.di.components.DaggerHomeActivityComponent;
 import com.smallproject.di.components.HomeActivityComponent;
-import com.smallproject.domain.model.Temp;
+import com.smallproject.domain.model.Post;
+import com.smallproject.ui.adapter.PostAdapter;
 import com.smallproject.ui.presenter.HomeActivityPresenter;
-import com.smallproject.ui.util.Images;
-import com.squareup.picasso.Picasso;
+import com.smallproject.ui.util.Tags;
+import java.util.ArrayList;
 import javax.inject.Inject;
 
-public class HomeActivity extends Activity implements HomeActivityPresenter.View {
+public class HomeActivity extends AbstractActivity implements HomeActivityPresenter.View {
 
   private HomeActivityComponent homeActivityComponent;
 
-  private ImageView backgroundImage;
-  private TextView actualTemp;
+  private ListView listView;
 
   @Inject HomeActivityPresenter homeActivityPresenter;
 
+  @Override protected int getLayoutId() {
+    return R.layout.activity_home;
+  }
+
+  @Override protected void bindViews() {
+    listView = (ListView) findViewById(R.id.list_view);
+  }
+
   @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
     homeActivityComponent().inject(this);
-    setContentView(R.layout.activity_home);
+    super.onCreate(savedInstanceState);
     homeActivityPresenter.setView(this);
-    backgroundImage = (ImageView) findViewById(R.id.background_image);
-    actualTemp = (TextView) findViewById(R.id.actual_temp);
   }
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    Picasso.with(this).load(Images.SNOW_DAY_SD).into(backgroundImage);
+    configListView();
+    homeActivityPresenter.initialize();
   }
 
   @Override protected void onResume() {
@@ -64,8 +71,10 @@ public class HomeActivity extends Activity implements HomeActivityPresenter.View
     return !isFinishing();
   }
 
-  @Override public void onSuccess(Temp temp) {
-
+  @Override public void onSuccess(ArrayList<Post> posts) {
+    PostAdapter adapter = ((PostAdapter) listView.getAdapter());
+    adapter.setData(posts);
+    adapter.notifyDataSetChanged();
   }
 
   @Override public void onError() {
@@ -74,6 +83,34 @@ public class HomeActivity extends Activity implements HomeActivityPresenter.View
 
   @Override public Context getContext() {
     return this;
+  }
+
+  private void configListView() {
+    listView.setOnItemClickListener(onItemClickListener);
+    listView.setAdapter(new PostAdapter(this));
+  }
+
+  private ListView.OnItemClickListener onItemClickListener =
+      new AdapterView.OnItemClickListener() {
+    @Override public void onItemClick(AdapterView<?> parent,
+        View view, int position, long id) {
+      startPostDetailActivity(position, view.getTag());
+    }
+  };
+
+  private void startPostDetailActivity(int position, Object tag) {
+    Post post = homeActivityPresenter.getPostAtPosition(position);
+    if(post != null) {
+      Intent intent;
+      if(tag == Tags.POST_CONTENT_TAG) {
+        intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+        intent.putExtra(Post.TAG, post);
+        startActivity(intent);
+      } else {
+        //intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+        //intent.putExtra(Post.TAG, post);
+      }
+    }
   }
 
   private HomeActivityComponent homeActivityComponent() {

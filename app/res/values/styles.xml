@@ -1,7 +1,11 @@
 <resources>
 
   <style name="AppTheme" parent="android:Theme.Black.NoTitleBar">
+    <item name="android:background">@color/white</item>
+  </style>
 
+  <style name="AppTheme.Black" parent="android:Theme.Black.NoTitleBar">
+    <item name="android:background">@color/white</item>
   </style>
 
 </resources>

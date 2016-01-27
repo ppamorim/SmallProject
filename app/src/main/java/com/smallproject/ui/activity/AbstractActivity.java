@@ -13,12 +13,20 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.smallproject.domain.interactor;
+package com.smallproject.ui.activity;
 
-public interface GetTemp {
-  void execute(Callback callback);
-  interface Callback {
-    void onSuccess();
-    void onError();
+import android.app.Activity;
+import android.os.Bundle;
+
+public abstract class AbstractActivity extends Activity {
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(getLayoutId());
+    bindViews();
   }
+
+  protected abstract int getLayoutId();
+  protected abstract void bindViews();
+
 }

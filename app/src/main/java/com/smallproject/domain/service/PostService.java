@@ -15,27 +15,26 @@
 */
 package com.smallproject.domain.service;
 
+import com.smallproject.ui.util.Url;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Inject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
-public class TempService {
+public class PostService {
 
   private OkHttpClient okHttpClient;
 
-  @Inject public TempService(OkHttpClient okHttpClient) {
+  @Inject public PostService(OkHttpClient okHttpClient) {
     this.okHttpClient = okHttpClient;
   }
 
-  public InputStream getActualTemperature() throws IOException {
+  public InputStream getRecentPosts() throws IOException {
       Request request = new Request.Builder()
-          .url("")
+          .url(Url.SAMPLE_JSON)
           .build();
-      Response response = okHttpClient.newCall(request).execute();
-      return response.body().byteStream();
+      return okHttpClient.newCall(request).execute().body().byteStream();
   }
 
 }

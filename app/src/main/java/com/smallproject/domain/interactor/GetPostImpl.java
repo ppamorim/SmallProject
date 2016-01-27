@@ -16,23 +16,24 @@
 package com.smallproject.domain.interactor;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.smallproject.domain.model.Temp;
-import com.smallproject.domain.service.TempService;
+import com.smallproject.domain.model.Post;
+import com.smallproject.domain.service.PostService;
 import com.smallproject.executor.Interactor;
 import com.smallproject.executor.InteractorExecutor;
 import com.smallproject.executor.MainThread;
+import java.util.ArrayList;
 import javax.inject.Inject;
 import okhttp3.OkHttpClient;
 
-public class GetTempImpl implements Interactor, GetTemp {
+public class GetPostImpl implements Interactor, GetPost {
 
   private final InteractorExecutor interactorExecutor;
   private final MainThread mainThread;
   private Callback callback;
   private OkHttpClient okHttpClient;
 
-  @Inject public GetTempImpl(InteractorExecutor interactorExecutor,
-      MainThread mainThread, OkHttpClient okHttpClient) {
+  @Inject public GetPostImpl(InteractorExecutor interactorExecutor, MainThread mainThread,
+      OkHttpClient okHttpClient) {
     this.interactorExecutor = interactorExecutor;
     this.mainThread = mainThread;
     this.okHttpClient = okHttpClient;
@@ -48,10 +49,13 @@ public class GetTempImpl implements Interactor, GetTemp {
 
   @Override public void run() {
     try {
-      TempService tempService = new TempService(okHttpClient);
-      Temp temp = LoganSquare.parse(tempService.getActualTemperature(), Temp.class);
-      if(temp != null) {
-        notifySuccess();
+      PostService postService = new PostService(okHttpClient);
+      ArrayList<Post> posts = (ArrayList<Post>) LoganSquare.parseList(
+          postService.getRecentPosts(), Post.class);
+      if(posts != null) {
+        notifySuccess(posts);
+      } else {
+        notifyError();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -59,10 +63,10 @@ public class GetTempImpl implements Interactor, GetTemp {
     }
   }
 
-  private void notifySuccess() {
+  private void notifySuccess(final ArrayList<Post> posts) {
     mainThread.post(new Runnable() {
       @Override public void run() {
-        callback.onSuccess();
+        callback.onSuccess(posts);
       }
     });
   }
