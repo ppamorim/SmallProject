@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".ui.activity.PostDetailActivity"
             android:theme="@style/AppTheme.Black"/>
+        <activity android:name=".ui.activity.ChatActivity"/>
+        <activity android:name=".ui.activity.SettingsActivity"/>
     </application>
 
 </manifest>

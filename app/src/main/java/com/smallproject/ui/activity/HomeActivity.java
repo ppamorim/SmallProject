@@ -19,7 +19,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import com.smallproject.R;
 import com.smallproject.SmallProjectApplication;
@@ -39,6 +41,8 @@ public class HomeActivity extends AbstractActivity implements HomeActivityPresen
   private HomeActivityComponent homeActivityComponent;
 
   private ListView listView;
+  private ImageButton chatButton;
+  private ImageButton settingsButton;
 
   @Inject HomeActivityPresenter homeActivityPresenter;
 
@@ -48,6 +52,8 @@ public class HomeActivity extends AbstractActivity implements HomeActivityPresen
 
   @Override protected void bindViews() {
     listView = (ListView) findViewById(R.id.list_view);
+    chatButton = (ImageButton) findViewById(R.id.chat_button);
+    settingsButton = (ImageButton) findViewById(R.id.settings_button);
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,7 @@ public class HomeActivity extends AbstractActivity implements HomeActivityPresen
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
+    configButtons();
     configListView();
     homeActivityPresenter.initialize();
   }
@@ -85,31 +92,48 @@ public class HomeActivity extends AbstractActivity implements HomeActivityPresen
     return this;
   }
 
+  private void configButtons() {
+    chatButton.setOnClickListener(onClickListener);
+    settingsButton.setOnClickListener(onClickListener);
+    chatButton.setTag(Tags.CHAT_BUTTON);
+    settingsButton.setTag(Tags.SETTINGS_BUTTON);
+  }
+
   private void configListView() {
     listView.setOnItemClickListener(onItemClickListener);
     listView.setAdapter(new PostAdapter(this));
   }
 
+  private View.OnClickListener onClickListener = new View.OnClickListener() {
+    @Override public void onClick(View view) {
+      Intent intent;
+      switch((Integer) view.getTag()) {
+        case Tags.CHAT_BUTTON:
+          intent = new Intent(getApplicationContext(), ChatActivity.class);
+          break;
+        default:
+        case Tags.SETTINGS_BUTTON:
+          intent = new Intent(getApplicationContext(), SettingsActivity.class);
+          break;
+      }
+      startActivity(intent);
+    }
+  };
+
   private ListView.OnItemClickListener onItemClickListener =
       new AdapterView.OnItemClickListener() {
     @Override public void onItemClick(AdapterView<?> parent,
         View view, int position, long id) {
-      startPostDetailActivity(position, view.getTag());
+      startPostDetailActivity(position);
     }
   };
 
-  private void startPostDetailActivity(int position, Object tag) {
+  private void startPostDetailActivity(int position) {
     Post post = homeActivityPresenter.getPostAtPosition(position);
     if(post != null) {
-      Intent intent;
-      if(tag == Tags.POST_CONTENT_TAG) {
-        intent = new Intent(getApplicationContext(), PostDetailActivity.class);
-        intent.putExtra(Post.TAG, post);
-        startActivity(intent);
-      } else {
-        //intent = new Intent(getApplicationContext(), PostDetailActivity.class);
-        //intent.putExtra(Post.TAG, post);
-      }
+      Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+      intent.putExtra(Post.TAG, post);
+      startActivity(intent);
     }
   }
 

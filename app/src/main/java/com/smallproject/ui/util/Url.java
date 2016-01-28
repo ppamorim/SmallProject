@@ -17,5 +17,5 @@ package com.smallproject.ui.util;
 
 public class Url {
   public static final String SAMPLE_JSON = "https://gist.githubusercontent.com/ppamorim/"
-      + "609ab0a71b9e56ac8686/raw/d4cf90a2cac052260193787f3670a5eb7eee5a67/sample_json.json";
+      + "609ab0a71b9e56ac8686/raw/d2e39e05c87e0940423d9bb96c2d1c567fc63ad4/sample_json.json";
 }

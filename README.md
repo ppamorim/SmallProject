@@ -13,7 +13,6 @@ Let's start the Proguard!
 Gotchas
 -------
 
-* The project needs to remove the locationListener, this adds 100kb for the app.
 * This is written in Java, Hardly I will can reduce the size of the app...
 
 Libraries
