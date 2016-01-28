@@ -18,6 +18,7 @@ package com.smallproject.ui.presenter;
 import android.os.Bundle;
 import com.smallproject.domain.interactor.GetPost;
 import com.smallproject.domain.model.Post;
+import com.smallproject.ui.util.Tags;
 import java.util.ArrayList;
 import javax.inject.Inject;
 
@@ -48,20 +49,19 @@ public class HomeActivityPresenterImpl implements HomeActivityPresenter {
 
   @Override public Bundle saveInstance(Bundle instance) {
     if (posts != null) {
-      instance.putParcelableArrayList(Post.TAG, posts);
+      instance.putParcelableArrayList(Tags.POST, posts);
     }
     return instance;
   }
 
   @Override public void restoreInstance(Bundle instance) {
-    if (instance.containsKey(Post.TAG)) {
-      posts = instance.getParcelableArrayList(Post.TAG);
-      instance.remove(Post.TAG);
+    if (instance.containsKey(Tags.POST)) {
+      posts = instance.getParcelableArrayList(Tags.POST);
+      instance.remove(Tags.POST);
     }
   }
 
   @Override public void destroy() {
-    this.view = null;
     this.posts = null;
   }
 

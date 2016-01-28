@@ -15,7 +15,6 @@
 */
 package com.smallproject.ui.presenter;
 
-import android.content.Context;
 import com.smallproject.domain.model.Post;
 import java.util.ArrayList;
 
@@ -24,10 +23,8 @@ public interface HomeActivityPresenter extends Presenter {
   void resume();
   Post getPostAtPosition(int position);
   interface View {
-    Context getContext();
     boolean isReady();
     void onSuccess(ArrayList<Post> posts);
     void onError();
   }
-
 }

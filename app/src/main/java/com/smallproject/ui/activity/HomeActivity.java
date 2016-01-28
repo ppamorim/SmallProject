@@ -15,11 +15,9 @@
 */
 package com.smallproject.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -36,7 +34,10 @@ import com.smallproject.ui.util.Tags;
 import java.util.ArrayList;
 import javax.inject.Inject;
 
-public class HomeActivity extends AbstractActivity implements HomeActivityPresenter.View {
+public class HomeActivity extends AbstractActivity implements
+    HomeActivityPresenter.View,
+    View.OnClickListener,
+    ListView.OnItemClickListener {
 
   private HomeActivityComponent homeActivityComponent;
 
@@ -88,51 +89,44 @@ public class HomeActivity extends AbstractActivity implements HomeActivityPresen
 
   }
 
-  @Override public Context getContext() {
-    return this;
+  @Override public void onClick(View view) {
+    Intent intent;
+    switch((Integer) view.getTag()) {
+      case Tags.CHAT_BUTTON:
+        intent = new Intent(getApplicationContext(),
+            ChatActivity.class);
+        break;
+      default:
+      case Tags.SETTINGS_BUTTON:
+        intent = new Intent(getApplicationContext(),
+            SettingsActivity.class);
+        break;
+    }
+    startActivity(intent);
+  }
+
+  @Override public void onItemClick(AdapterView<?> parent,
+      View view, int position, long id) {
+    startPostDetailActivity(position);
   }
 
   private void configButtons() {
-    chatButton.setOnClickListener(onClickListener);
-    settingsButton.setOnClickListener(onClickListener);
+    chatButton.setOnClickListener(this);
+    settingsButton.setOnClickListener(this);
     chatButton.setTag(Tags.CHAT_BUTTON);
     settingsButton.setTag(Tags.SETTINGS_BUTTON);
   }
 
   private void configListView() {
-    listView.setOnItemClickListener(onItemClickListener);
+    listView.setOnItemClickListener(this);
     listView.setAdapter(new PostAdapter(this));
   }
-
-  private View.OnClickListener onClickListener = new View.OnClickListener() {
-    @Override public void onClick(View view) {
-      Intent intent;
-      switch((Integer) view.getTag()) {
-        case Tags.CHAT_BUTTON:
-          intent = new Intent(getApplicationContext(), ChatActivity.class);
-          break;
-        default:
-        case Tags.SETTINGS_BUTTON:
-          intent = new Intent(getApplicationContext(), SettingsActivity.class);
-          break;
-      }
-      startActivity(intent);
-    }
-  };
-
-  private ListView.OnItemClickListener onItemClickListener =
-      new AdapterView.OnItemClickListener() {
-    @Override public void onItemClick(AdapterView<?> parent,
-        View view, int position, long id) {
-      startPostDetailActivity(position);
-    }
-  };
 
   private void startPostDetailActivity(int position) {
     Post post = homeActivityPresenter.getPostAtPosition(position);
     if(post != null) {
       Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
-      intent.putExtra(Post.TAG, post);
+      intent.putExtra(Tags.POST, post);
       startActivity(intent);
     }
   }

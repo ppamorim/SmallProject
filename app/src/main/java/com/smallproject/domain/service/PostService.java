@@ -20,21 +20,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Inject;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
-public class PostService {
-
-  private OkHttpClient okHttpClient;
+public class PostService extends AbstractService {
 
   @Inject public PostService(OkHttpClient okHttpClient) {
-    this.okHttpClient = okHttpClient;
+    super(okHttpClient);
   }
 
   public InputStream getRecentPosts() throws IOException {
-      Request request = new Request.Builder()
-          .url(Url.SAMPLE_JSON)
-          .build();
-      return okHttpClient.newCall(request).execute().body().byteStream();
+      return get(Url.SAMPLE_JSON);
   }
 
 }

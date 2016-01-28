@@ -35,6 +35,14 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/warning_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/loading"
+        android:gravity="center"/>
 
 </LinearLayout>

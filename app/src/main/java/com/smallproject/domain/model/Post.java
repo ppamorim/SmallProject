@@ -23,8 +23,6 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 @JsonObject
 public class Post implements Parcelable {
 
-  public static final String TAG = "post";
-
   @JsonField private int id;
   @JsonField private String content;
   @JsonField private String image;

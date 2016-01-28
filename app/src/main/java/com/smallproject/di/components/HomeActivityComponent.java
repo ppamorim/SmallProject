@@ -19,6 +19,7 @@ import android.app.Activity;
 import com.smallproject.di.ActivityModule;
 import com.smallproject.di.HomeActivityModule;
 import com.smallproject.di.scopes.ActivityScope;
+import com.smallproject.domain.interactor.GetPost;
 import com.smallproject.ui.activity.HomeActivity;
 import com.smallproject.ui.presenter.HomeActivityPresenter;
 import dagger.Component;
@@ -29,4 +30,5 @@ public interface HomeActivityComponent extends AbstractActivityComponent {
   void inject(HomeActivity homeActivity);
   Activity activityContext();
   HomeActivityPresenter homeActivityPresenter();
+  GetPost getPost();
 }

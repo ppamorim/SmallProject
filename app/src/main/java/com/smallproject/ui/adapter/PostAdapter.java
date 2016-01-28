@@ -38,11 +38,9 @@ public class PostAdapter extends AbstractAdapter<Post> {
 
     Post post = getItem(position);
     String image = post.getImage();
-    boolean imageIsvalid = image != null;
-
     ViewHolder holder;
 
-    if(imageIsvalid) {
+    if(image != null) {
       if (convertView != null) {
         holder = (ViewHolderImage) convertView.getTag();
       } else {

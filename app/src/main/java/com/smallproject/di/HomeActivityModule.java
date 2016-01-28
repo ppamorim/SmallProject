@@ -30,9 +30,9 @@ import dagger.Provides;
     return getPresenter;
   }
 
-  @Provides @ActivityScope GetPost provideGetTemp(
-      GetPostImpl getTemp) {
-    return getTemp;
+  @Provides @ActivityScope GetPost provideGetPost(
+      GetPostImpl getPost) {
+    return getPost;
   }
 
 }

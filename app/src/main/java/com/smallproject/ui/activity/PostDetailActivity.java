@@ -16,26 +16,45 @@
 package com.smallproject.ui.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.smallproject.R;
 import com.smallproject.domain.model.Post;
+import com.smallproject.ui.util.Tags;
 import com.squareup.picasso.Picasso;
 
-public class PostDetailActivity extends AbstractActivity {
+public class PostDetailActivity extends AbstractActivity implements View.OnClickListener {
 
   private ImageView postImage;
+  private ImageButton likeButton;
 
   @Override protected int getLayoutId() {
-    return R.layout.activity_detail;
+    return R.layout.activity_post_detail;
   }
 
   @Override protected void bindViews() {
     postImage = (ImageView) findViewById(R.id.post_image);
+    likeButton = (ImageButton) findViewById(R.id.like_button);
   }
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    Post post = getIntent().getParcelableExtra(Post.TAG);
+    configButtons();
+    Post post = getIntent().getParcelableExtra(Tags.POST);
     Picasso.with(this).load(post.getImage()).fit().centerInside().into(postImage);
   }
+
+  @Override public void onClick(View view) {
+    switch ((Integer) view.getTag()) {
+      case Tags.LIKE_POST:
+        break;
+    }
+  }
+
+  private void configButtons() {
+    likeButton.setOnClickListener(this);
+    likeButton.setTag(Tags.LIKE_POST);
+  }
+
 }

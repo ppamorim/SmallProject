@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">SmallProject</string>
+  <string name="loading">Carregando</string>
+  <string name="error">Ocorreu um erro, clique para tentar novamente</string>
 </resources>
