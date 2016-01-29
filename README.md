@@ -10,6 +10,16 @@ Let's start the Proguard!
 * (Project + Picasso + Dagger + OkHttp)*Proguard = 24kb :D
 * (Project + Picasso + Dagger + OkHttp + LoganSquare)*Proguard = 85kb :(
 
+Todo
+----
+
+* Add vectors to the project(image of the buttons)
+* Add login/register activity
+* Finish settings activity
+* Add profile activity
+* Add like button on the post adapter
+
+
 Gotchas
 -------
 
